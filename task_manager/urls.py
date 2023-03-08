@@ -16,10 +16,6 @@ Including another URLconf
 from main.admin import task_manager_admin_site
 from django.urls import path
 
-<<<<<<< Updated upstream
 urlpatterns = [
     path("admin/", task_manager_admin_site.urls)
 ]
-=======
-urlpatterns = [path("admin/", task_manager_admin_site.urls)]
->>>>>>> Stashed changes
