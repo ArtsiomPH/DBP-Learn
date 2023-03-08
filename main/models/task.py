@@ -23,7 +23,9 @@ class Task(models.Model):
         max_length=255, default=Status.NEW_TASK, choices=Status.choices, null=True
     )
     priority = models.IntegerField(null=True)
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="author", null=True)
+    author = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="author", null=True
+    )
     executor = models.ForeignKey(
         User, on_delete=models.SET_NULL, null=True, related_name="executor"
     )
