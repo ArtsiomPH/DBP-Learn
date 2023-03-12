@@ -1,8 +1,9 @@
 from rest_framework import serializers
-from models import User, Task, Tag
+from .models import User, Task, Tag
 
 
 class UserSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = User
         fields = (
@@ -13,10 +14,15 @@ class UserSerializer(serializers.ModelSerializer):
             "email",
             "date_of_birth",
             "phone",
+            "role"
         )
 
 
 class TaskSerializer(serializers.ModelSerializer):
+    tag = serializers.StringRelatedField(many=True)
+    author = UserSerializer()
+    executor = UserSerializer()
+
     class Meta:
         model = Task
         fields = (
@@ -30,6 +36,7 @@ class TaskSerializer(serializers.ModelSerializer):
             "priority",
             "author",
             "executor",
+            "tag"
         )
 
 
