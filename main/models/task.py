@@ -17,15 +17,17 @@ class Task(models.Model):
     title = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
     creation_date = models.DateField(default=django.utils.timezone.now)
-    mod_date = models.DateField()
-    deadline = models.DateField()
+    mod_date = models.DateField(null=True)
+    deadline = models.DateField(null=True)
     status = models.CharField(
-        max_length=255, default=Status.NEW_TASK, choices=Status.choices
+        max_length=255, default=Status.NEW_TASK, choices=Status.choices, null=True
     )
-    priority = models.IntegerField()
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="author")
+    priority = models.IntegerField(null=True)
+    author = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="created_tasks", null=True
+    )
     executor = models.ForeignKey(
-        User, on_delete=models.SET_NULL, null=True, related_name="executor"
+        User, on_delete=models.SET_NULL, null=True, related_name="inprogress_tasks"
     )
 
     def __str__(self):
