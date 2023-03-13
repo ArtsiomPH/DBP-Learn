@@ -30,7 +30,7 @@ class Task(models.Model):
     executor = models.ForeignKey(
         User, on_delete=models.SET_NULL, null=True, related_name="inprogress_tasks"
     )
-    tag = models.ManyToManyField(Tag)
+    tags = models.ManyToManyField(Tag)
 
     def __str__(self):
         return self.title
