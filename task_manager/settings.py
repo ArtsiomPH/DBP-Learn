@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     # additional apps
     "django_filters",
     "rest_framework",
+    'drf_yasg',
     # user apps
     "main",
 ]
