@@ -27,7 +27,7 @@ class TagSerializer(serializers.ModelSerializer):
 class TaskSerializer(serializers.ModelSerializer):
     author = UserSerializer()
     executor = UserSerializer()
-    tag = TagSerializer(many=True)
+    tags = TagSerializer(many=True)
 
     class Meta:
         model = Task
@@ -42,5 +42,5 @@ class TaskSerializer(serializers.ModelSerializer):
             "priority",
             "author",
             "executor",
-            "tag",
+            "tags",
         )

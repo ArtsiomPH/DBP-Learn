@@ -20,11 +20,11 @@ class TaskFilter(django_filters.FilterSet):
     executor = django_filters.CharFilter(
         field_name="executor__username", lookup_expr="icontains"
     )
-    tag = django_filters.AllValuesMultipleFilter(field_name="tag__title")
+    tags = django_filters.AllValuesMultipleFilter(field_name="tags__title")
 
     class Meta:
         model = Task
-        fields = ("status", "author", "executor", "tag")
+        fields = ("status", "author", "executor", "tags")
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -37,7 +37,7 @@ class TaskViewSet(viewsets.ModelViewSet):
     queryset = (
         Task.objects.select_related("author")
         .select_related("executor")
-        .prefetch_related("tag")
+        .prefetch_related("tags")
         .all()
     )
     serializer_class = TaskSerializer
