@@ -12,7 +12,7 @@ class TestViewSetBase(APITestCase):
     user: User = None
     client: APIClient = None
     basename: str
-    user_attributes: dict
+    task_attributes: dict
 
     @classmethod
     def setUpTestData(cls) -> None:
@@ -37,7 +37,7 @@ class TestViewSetBase(APITestCase):
     def list_url(cls, args: List[Union[str, int]] = None) -> str:
         return reverse(f"{cls.basename}-list", args=args)
 
-    def list(self, args: List[Union[str, int]] = None, kwargs: dict = None):
+    def list(self, args: List[Union[str, int]] = None, kwargs: dict = None) -> dict:
         self.client.force_login(self.user)
         response = self.client.get(self.list_url(args), kwargs)
         assert response.status_code == HTTPStatus.OK
@@ -45,7 +45,7 @@ class TestViewSetBase(APITestCase):
 
     def create(self, data: dict, args: List[Union[str, int]] = None) -> dict:
         self.client.force_login(self.user)
-        response = self.client.post(self.list_url(args), data=data)
+        response = self.client.post(self.list_url(args), data=data, format='json')
         assert response.status_code == HTTPStatus.CREATED, response.content
         return response.data
 
@@ -57,7 +57,7 @@ class TestViewSetBase(APITestCase):
 
     def update(self, data: dict, key: Union[str, int] = None) -> dict:
         self.client.force_login(self.user)
-        response = self.client.patch(self.detail_url(key), data=data)
+        response = self.client.patch(self.detail_url(key), data=data, format='json')
         assert response.status_code == HTTPStatus.OK
         return response.data
 

@@ -44,3 +44,19 @@ class TaskSerializer(serializers.ModelSerializer):
             "executor",
             "tags",
         )
+
+    def create(self, validated_data):
+        for user in ['author', 'executor']:
+            user_dict = validated_data[user]
+            user_instance, _ = User.objects.get_or_create(**user_dict)
+            validated_data[user] = user_instance
+
+        tags_list = []
+        for tag in validated_data['tags']:
+            tag, _ = Tag.objects.get_or_create(**tag)
+            tags_list.append(tag)
+
+        validated_data.pop('tags')
+        new_task = Task.objects.create(**validated_data)
+        new_task.tags.set(tags_list)
+        return new_task
