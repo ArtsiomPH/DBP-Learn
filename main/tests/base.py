@@ -37,30 +37,30 @@ class TestViewSetBase(APITestCase):
         return reverse(f"{cls.basename}-list", args=args)
 
     def list(self, args: List[Union[str, int]] = None, kwargs: dict = None) -> dict:
-        self.client.force_login(self.user)
+        self.client.force_authenticate(user=self.user, token=None)
         response = self.client.get(self.list_url(args), kwargs)
         assert response.status_code == HTTPStatus.OK
         return response.json()
 
     def create(self, data: dict, args: List[Union[str, int]] = None) -> dict:
-        self.client.force_login(self.user)
+        self.client.force_authenticate(user=self.user, token=None)
         response = self.client.post(self.list_url(args), data=data, format="json")
         assert response.status_code == HTTPStatus.CREATED, response.content
         return response.data
 
     def retrieve(self, key: Union[str, int] = None) -> dict:
-        self.client.force_login(self.user)
+        self.client.force_authenticate(user=self.user, token=None)
         response = self.client.get(self.detail_url(key))
         assert response.status_code == HTTPStatus.OK
         return response.data
 
     def update(self, data: dict, key: Union[str, int] = None) -> dict:
-        self.client.force_login(self.user)
+        self.client.force_authenticate(user=self.user, token=None)
         response = self.client.patch(self.detail_url(key), data=data, format="json")
         assert response.status_code == HTTPStatus.OK
         return response.data
 
     def delete(self, key: Union[str, int] = None) -> HTTPStatus:
-        self.client.force_login(self.admin)
+        self.client.force_authenticate(user=self.admin, token=None)
         response = self.client.delete(self.detail_url(key))
         return response.status_code
