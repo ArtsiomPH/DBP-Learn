@@ -4,13 +4,13 @@ from main.tests.base import TestViewSetBase
 class TestUserViewSet(TestViewSetBase):
     basename = "users"
     user_attributes = {
-        'username': 'johnsmith',
-        'first_name': 'John',
-        'last_name': 'Smith',
-        'email': 'john@test.com',
-        'date_of_birth': '2000-01-01',
-        'phone': '+79000000000',
-        'role': 'developer'
+        "username": "johnsmith",
+        "first_name": "John",
+        "last_name": "Smith",
+        "email": "john@test.com",
+        "date_of_birth": "2000-01-01",
+        "phone": "+79000000000",
+        "role": "developer",
     }
 
     @staticmethod
@@ -24,26 +24,24 @@ class TestUserViewSet(TestViewSetBase):
 
     def test_retrieve(self) -> None:
         user = self.create(self.user_attributes)
-        retrived_user = self.retrieve(user['id'])
+        retrived_user = self.retrieve(user["id"])
         assert user == retrived_user
 
     def test_update(self) -> None:
-        for_update = {'email': 'john@test.ru'}
+        for_update = {"email": "john@test.ru"}
         user = self.create(self.user_attributes)
-        updated_user = self.update(for_update, user['id'])
+        updated_user = self.update(for_update, user["id"])
         user.update(for_update)
         assert user == updated_user
 
     def test_delete(self) -> None:
         user = self.create(self.user_attributes)
-        deleted_user = self.delete(user['id'])
+        deleted_user = self.delete(user["id"])
         assert deleted_user == 204
 
     def test_filtration(self) -> None:
         user = self.create(self.user_attributes)
-        expected_users = self.list(kwargs={'username': 'john'})
+        expected_users = self.list(kwargs={"username": "john"})
         assert user == expected_users[0]
-        expected_users = self.list(kwargs={'username': 'alex'})
+        expected_users = self.list(kwargs={"username": "alex"})
         assert len(expected_users) == 0
-
-

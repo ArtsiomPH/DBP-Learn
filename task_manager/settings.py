@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     # additional apps
     "django_filters",
     "rest_framework",
-    'drf_yasg',
+    "drf_yasg",
+    "rest_framework_simplejwt",
     # user apps
     "main",
 ]
@@ -134,5 +135,8 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": (
         "rest_framework.permissions.IsAuthenticated",
         "main.permissions.IsStaffDeleteOnly",
+    ),
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
 }

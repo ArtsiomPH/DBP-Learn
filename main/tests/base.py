@@ -26,7 +26,7 @@ class TestViewSetBase(APITestCase):
 
     @staticmethod
     def create_superuser():
-        return User.objects.create_superuser('admin')
+        return User.objects.create_superuser("admin")
 
     @classmethod
     def detail_url(cls, key: Union[int, str]) -> str:
@@ -44,7 +44,7 @@ class TestViewSetBase(APITestCase):
 
     def create(self, data: dict, args: List[Union[str, int]] = None) -> dict:
         self.client.force_login(self.user)
-        response = self.client.post(self.list_url(args), data=data, format='json')
+        response = self.client.post(self.list_url(args), data=data, format="json")
         assert response.status_code == HTTPStatus.CREATED, response.content
         return response.data
 
@@ -56,7 +56,7 @@ class TestViewSetBase(APITestCase):
 
     def update(self, data: dict, key: Union[str, int] = None) -> dict:
         self.client.force_login(self.user)
-        response = self.client.patch(self.detail_url(key), data=data, format='json')
+        response = self.client.patch(self.detail_url(key), data=data, format="json")
         assert response.status_code == HTTPStatus.OK
         return response.data
 
@@ -64,6 +64,3 @@ class TestViewSetBase(APITestCase):
         self.client.force_login(self.admin)
         response = self.client.delete(self.detail_url(key))
         return response.status_code
-
-
-
