@@ -294,6 +294,17 @@ django = ">=3.0"
 pytz = "*"
 
 [[package]]
+name = "drf-writable-nested"
+version = "0.7.0"
+description = "Writable nested helpers for django-rest-framework's serializers"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "drf_writable_nested-0.7.0-py3-none-any.whl", hash = "sha256:154c0381e8a3a477e0fd539d5e1caf8ff4c1097a9c0c0fe741d4858b11b0455b"},
+]
+
+[[package]]
 name = "drf-yasg"
 version = "1.21.5"
 description = "Automated generation of real Swagger/OpenAPI 2.0 schemas from Django Rest Framework code."
@@ -885,4 +896,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "cbd26d361d7a2dc71e6a79b22db7950505705da511a3f3bceb440a133ebb19f6"
+content-hash = "213ccf08e5393fc15e7f6efd75de1adda5398d8c911f1fce1ff987241ae2a540"

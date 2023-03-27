@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from drf_writable_nested.serializers import WritableNestedModelSerializer
 
 from .models import User, Task, Tag
 
@@ -24,7 +25,7 @@ class TagSerializer(serializers.ModelSerializer):
         fields = ("id", "title")
 
 
-class TaskSerializer(serializers.ModelSerializer):
+class TaskSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
     author = UserSerializer()
     executor = UserSerializer()
     tags = TagSerializer(many=True)

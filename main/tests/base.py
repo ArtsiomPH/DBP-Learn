@@ -2,7 +2,6 @@ from http import HTTPStatus
 from typing import Union, List
 
 from rest_framework.test import APIClient, APITestCase
-from rest_framework.response import Response
 from django.urls import reverse
 
 from main.models import User

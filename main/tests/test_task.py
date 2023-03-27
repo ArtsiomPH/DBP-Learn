@@ -3,15 +3,6 @@ from main.tests.base import TestViewSetBase
 
 class TestTaskViewSet(TestViewSetBase):
     basename = "tasks"
-    user_attributes = {
-            'username': 'johnsmith',
-            'first_name': 'John',
-            'last_name': 'Smith',
-            'email': 'john@test.com',
-            'date_of_birth': '2000-01-01',
-            'phone': '+79000000000',
-            'role': 'developer'
-        }
     task_attributes = {
         'title': "task",
         "description": "little task",
@@ -20,7 +11,6 @@ class TestTaskViewSet(TestViewSetBase):
         "deadline": "2023-03-15",
         "status": "new_task",
         "priority": 1,
-
         "author": {
             'username': 'johnsmith',
             'first_name': 'John',
@@ -31,11 +21,11 @@ class TestTaskViewSet(TestViewSetBase):
             'role': 'developer'
         },
         "executor": {
-            'username': 'johnsmith',
+            'username': 'johndorian',
             'first_name': 'John',
-            'last_name': 'Smith',
-            'email': 'john@test.com',
-            'date_of_birth': '2000-01-01',
+            'last_name': 'Dorian',
+            'email': 'john@test.ru',
+            'date_of_birth': '2000-05-20',
             'phone': '+79000000000',
             'role': 'developer'
         },
@@ -44,6 +34,15 @@ class TestTaskViewSet(TestViewSetBase):
             {'title': 'not ok'}
         ]
     }
+    for_update_executor = {"executor": {
+            'username': 'christurk',
+            'first_name': 'Christopher',
+            'last_name': 'Turk',
+            'email': 'chris@test.com',
+            'date_of_birth': '2000-01-01',
+            'phone': '+79000000000',
+            'role': 'developer'
+    }}
 
     @staticmethod
     def expected_details(entity: dict, attributes: dict):
@@ -68,28 +67,20 @@ class TestTaskViewSet(TestViewSetBase):
         updated_task = self.update(for_update, task['id'])
         task.update(for_update)
         assert task == updated_task
-        for_update_executor = {"executor": {
-            'username': 'johndorian',
-            'first_name': 'John',
-            'last_name': 'dorian',
-            'email': 'john@test.ru',
-            'date_of_birth': '2000-05-20',
-            'phone': '+79000000000',
-            'role': 'developer'
-        }}
-        updated_task = self.update(for_update_executor, task['id'])
-        task.update(for_update_executor)
-        assert task == updated_task
+        updated_task = self.update(self.for_update_executor, task['id'])
+        task.update(self.for_update_executor)
+        assert task == self.expected_details(updated_task, task)
 
+    def test_delete(self):
+        task = self.create(self.task_attributes)
+        deleted_task = self.delete(task['id'])
+        assert deleted_task == 204
 
-    # def test_delete(self):
-    #     user = self.create(self.task_attributes)
-    #     deleted_user = self.delete(user['id'])
-    #     assert deleted_user == 204
-
-    # def test_filtration(self):
-    #     user = self.create(self.task_attributes)
-    #     expected_users = self.list(kwargs={'username': 'john'})
-    #     assert user == expected_users[0]
-    #     expected_users = self.list(kwargs={'username': 'alex'})
-    #     assert len(expected_users) == 0
+    def test_filtration(self):
+        task = self.create(self.task_attributes)
+        expected_tasks = self.list(kwargs={'author': 'john'})
+        assert task == expected_tasks[0]
+        expected_tasks = self.list(kwargs={'executor': 'dorian'})
+        assert task == expected_tasks[0]
+        expected_tasks = self.list(kwargs={'tags': 'ok'})
+        assert task == expected_tasks[0]
