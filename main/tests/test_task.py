@@ -45,23 +45,23 @@ class TestTaskViewSet(TestViewSetBase):
     }}
 
     @staticmethod
-    def expected_details(entity: dict, attributes: dict):
+    def expected_details(entity: dict, attributes: dict) -> dict:
         attributes['author'] = {"id": entity["author"]["id"], **attributes['author']}
         attributes['executor'] = {"id": entity["executor"]["id"], **attributes['executor']}
         attributes['tags'] = entity['tags']
         return {"id": entity["id"], **attributes}
 
-    def test_create(self):
+    def test_create(self) -> None:
         task = self.create(self.task_attributes)
         expected_response = self.expected_details(task, self.task_attributes)
         assert task == expected_response
 
-    def test_retrieve(self):
+    def test_retrieve(self) -> None:
         task = self.create(self.task_attributes)
         retrived_user = self.retrieve(task['id'])
         assert task == retrived_user
 
-    def test_update(self):
+    def test_update(self) -> None:
         for_update = {'mod_date': '2023-03-13'}
         task = self.create(self.task_attributes)
         updated_task = self.update(for_update, task['id'])
@@ -71,12 +71,12 @@ class TestTaskViewSet(TestViewSetBase):
         task.update(self.for_update_executor)
         assert task == self.expected_details(updated_task, task)
 
-    def test_delete(self):
+    def test_delete(self) -> None:
         task = self.create(self.task_attributes)
         deleted_task = self.delete(task['id'])
         assert deleted_task == 204
 
-    def test_filtration(self):
+    def test_filtration(self) -> None:
         task = self.create(self.task_attributes)
         expected_tasks = self.list(kwargs={'author': 'john'})
         assert task == expected_tasks[0]
