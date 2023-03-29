@@ -245,7 +245,7 @@ jinja2 = "*"
 name = "coverage"
 version = "6.5.0"
 description = "Code coverage measurement for Python"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 files = [
@@ -402,16 +402,6 @@ python-jose = ["python-jose (==3.3.0)"]
 test = ["cryptography", "pytest", "pytest-cov", "pytest-django", "pytest-xdist", "tox"]
 
 [[package]]
-name = "drf-writable-nested"
-version = "0.7.0"
-description = "Writable nested helpers for django-rest-framework's serializers"
-category = "main"
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "drf_writable_nested-0.7.0-py3-none-any.whl", hash = "sha256:154c0381e8a3a477e0fd539d5e1caf8ff4c1097a9c0c0fe741d4858b11b0455b"},
-
-[[package]]
 name = "docopt"
 version = "0.6.2"
 description = "Pythonic argument parser, that will make you smile"
@@ -420,6 +410,17 @@ optional = false
 python-versions = "*"
 files = [
     {file = "docopt-0.6.2.tar.gz", hash = "sha256:49b3a825280bd66b3aa83585ef59c4a8c82f2c8a522dbe754a8bc8d08c85c491"},
+]
+
+[[package]]
+name = "drf-writable-nested"
+version = "0.7.0"
+description = "Writable nested helpers for django-rest-framework's serializers"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "drf_writable_nested-0.7.0-py3-none-any.whl", hash = "sha256:154c0381e8a3a477e0fd539d5e1caf8ff4c1097a9c0c0fe741d4858b11b0455b"},
 ]
 
 [[package]]
@@ -1108,4 +1109,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "9378a1613b83cd4bd4426840a3c11a96deab71d2b72ca358678ee1e14bb4626d"
+content-hash = "2e4ac5c775e82943ddc8f6069e6aa56b99c217304718d33d3d95650cd2282948"
