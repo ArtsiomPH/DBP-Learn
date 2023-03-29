@@ -19,7 +19,5 @@ jobs:
           RAILS_ENV: test
         run: docker-compose --file docker-compose.ci.yml run --rm api pytest
       - name: Coveralls GitHub Action
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: docker-compose --file docker-compose.ci.yml run --rm api coveralls --service=github
+        run: docker-compose --file docker-compose.ci.yml run --rm -e COVERALLS_REPO_TOKEN=${{ vars.COVERALLS_REPO_TOKEN }} api coveralls
    
