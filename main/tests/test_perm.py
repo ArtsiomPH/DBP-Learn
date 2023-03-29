@@ -9,7 +9,7 @@ from main.models import Tag, Task, User
 
 
 class TestPerm(APITestCase):
-    client: APIClient
+    client: APIClient = None
     admin: User
     user: User
     models: list = [Tag, Task]
@@ -21,27 +21,26 @@ class TestPerm(APITestCase):
         cls.user = User.objects.create_user("user")
         cls.client = APIClient()
 
-    @classmethod
-    def assert_methods_status(cls, method: str, response_status: int) -> None:
-        for model in cls.models:
+    def assert_methods_status(self, method: str, response_status: int) -> None:
+        for model in self.models:
             obj = model.objects.create()
             url = reverse(f"{model._meta.model_name}s-detail", args=(obj.id,))
 
-        response = cls.client.__getattribute__(method)(url)
+        response = self.client.__getattribute__(method)(url)
         assert response.status_code == response_status
 
     def test_isauth_perm_with_noauth_user(self) -> None:
-        self.assert_methods_status("get", HTTPStatus.FORBIDDEN)
+        self.assert_methods_status("get", HTTPStatus.UNAUTHORIZED)
 
     def test_isauth_perm_with_auth_user(self) -> None:
-        TestPerm.client.force_login(self.admin)
+        self.client.force_authenticate(user=self.user, token=None)
         self.assert_methods_status("get", HTTPStatus.OK)
 
     def test_isstaffdelete_perm_with_usual_user(self) -> None:
-        TestPerm.client.force_login(self.user)
+        self.client.force_authenticate(user=self.user, token=None)
         self.assert_methods_status("get", HTTPStatus.OK)
         self.assert_methods_status("delete", HTTPStatus.FORBIDDEN)
 
     def test_isstaffdelete_perm_with_admin(self) -> None:
-        TestPerm.client.force_login(self.admin)
+        self.client.force_authenticate(user=self.admin, token=None)
         self.assert_methods_status("delete", HTTPStatus.NO_CONTENT)
