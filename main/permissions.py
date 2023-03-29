@@ -6,5 +6,5 @@ class IsStaffDeleteOnly(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
         if request.method == "DELETE":
-            return request.user.is_staff is True
+            return request.user.is_staff
         return True
