@@ -25,10 +25,10 @@ class Task(models.Model):
     )
     priority = models.IntegerField(null=True)
     author = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="created_tasks", null=True
+        User, on_delete=models.SET_NULL, related_name="created_tasks", null=True
     )
     executor = models.ForeignKey(
-        User, on_delete=models.SET_NULL, null=True, related_name="inprogress_tasks"
+        User, on_delete=models.SET_NULL, null=True, related_name="pending_tasks"
     )
     tags = models.ManyToManyField(Tag)
 

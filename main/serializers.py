@@ -1,10 +1,11 @@
 from rest_framework import serializers
 from drf_writable_nested.serializers import WritableNestedModelSerializer
+from drf_writable_nested.mixins import UniqueFieldsMixin
 
 from .models import User, Task, Tag
 
 
-class UserSerializer(serializers.ModelSerializer):
+class UserSerializer(UniqueFieldsMixin, serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
@@ -25,9 +26,9 @@ class TagSerializer(serializers.ModelSerializer):
         fields = ("id", "title")
 
 
-class TaskSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
-    author = UserSerializer()
-    executor = UserSerializer()
+class TaskSerializer(WritableNestedModelSerializer):
+    author = UserSerializer(many=False)
+    executor = UserSerializer(many=False)
     tags = TagSerializer(many=True)
 
     class Meta:
@@ -48,16 +49,15 @@ class TaskSerializer(WritableNestedModelSerializer, serializers.ModelSerializer)
 
     def create(self, validated_data):
         for user in ["author", "executor"]:
-            user_dict = validated_data[user]
+            user_dict = validated_data.pop(user)
             user_instance, _ = User.objects.get_or_create(**user_dict)
             validated_data[user] = user_instance
 
         tags_list = []
-        for tag in validated_data["tags"]:
+        for tag in validated_data.pop("tags"):
             tag, _ = Tag.objects.get_or_create(**tag)
             tags_list.append(tag)
 
-        validated_data.pop("tags")
         new_task = Task.objects.create(**validated_data)
         new_task.tags.set(tags_list)
         return new_task
