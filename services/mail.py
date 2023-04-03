@@ -14,7 +14,7 @@ def send_assign_notification(task_id: int) -> None:
             "task": task,
             "title": "New task",
             "invite": assignee,
-            "inviter_name": task.author,
+            "inviter_name": task.author.username,
         },
         recipients=[assignee.email],
     )
