@@ -60,8 +60,9 @@ class TestUserViewSet(TestViewSetBase):
         user_2 = self.create(self.user_attributes_additional)
         users_list = self.list(kwargs={"username": "john"})
         assert len(users_list) == 2
-        assert user_1 in users_list and user_2 in users_list
+        assert [user_1, user_2] == users_list
         users_list = self.list(kwargs={"username": "alex"})
         assert len(users_list) == 0
         users_list = self.list(kwargs={"username": "dorian"})
         assert user_2 == users_list[0]
+        assert [user_2] == users_list

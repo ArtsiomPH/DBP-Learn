@@ -86,7 +86,7 @@ class TestTaskViewSet(TestViewSetBase):
         task_2 = self.create(self.task_attributes_additional)
         tasks_list = self.list()
         assert len(tasks_list) == 2
-        assert task_1 in tasks_list and task_2 in tasks_list
+        assert [task_1, task_2] == tasks_list
 
     def test_create(self) -> None:
         task = self.create(self.task_attributes)
