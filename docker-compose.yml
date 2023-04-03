@@ -28,17 +28,3 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-
-  agent:
-    container_name: newrelic-infra
-    image: newrelic/infrastructure:latest
-    cap_add:
-      - SYS_PTRACE
-    network_mode: host
-    pid: host
-    privileged: true
-    volumes:
-      - "/:/host:ro"
-      - "/var/run/docker.sock:/var/run/docker.sock"
-    environment:
-      NRIA_LICENSE_KEY: eu01xxf50860d50d2c3cf38b2cebccf322beNRAL
