@@ -4,7 +4,7 @@
 <p style="
         font-size: 16px;
         line-height: 24px;
-        color: black;">Hi {{ invite.first_name }} {{ invite.last_name }}!</p>
+        color: black;">Hi {{ invite.first_name }} {{ invite.second_name }}!</p>
 <p style="
         font-size: 16px;
         line-height: 24px;
@@ -20,7 +20,7 @@
 <p style="text-align: center;
         font-size: 16px;
         line-height: 24px;">
-    <a href="{{ domain }}/sign-up?token={{ token }}&first_name={{ invite.first_name }}&last_name={{ invite.last_name }}&email={{ invite.email }}"
+    <a href="{{ domain }}/sign-up?token={{ token }}&first_name={{ invite.first_name }}&last_name={{ invite.second_name }}&email={{ invite.email }}"
        target="_blank"
        style="
         background-color: #FF5722;
@@ -38,7 +38,7 @@
         line-height: 24px;">If you are having trouble with the button, please click this link:</p>
 <a style="font-size: 16px;
         line-height: 24px;color:#ff5722;"
-   href="{{ domain }}/sign-up?token={{ token }}&first_name={{ invite.first_name }}&last_name={{ invite.last_name }}&email={{ invite.email }}"
+   href="{{ domain }}/sign-up?token={{ token }}&first_name={{ invite.first_name }}&last_name={{ invite.second_name }}&email={{ invite.email }}"
    target="_blank">{{ domain }}/sign-up?token={{ token }}&first_name={{ invite.first_name }}&last_name={{
-    invite.last_name }}&email={{ invite.email }}</a>
+    invite.second_name }}&email={{ invite.email }}</a>
 {% endblock %}
