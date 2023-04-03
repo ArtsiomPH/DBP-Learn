@@ -85,7 +85,6 @@ class TestTaskViewSet(TestViewSetBase):
         task_1 = self.create(self.task_attributes)
         task_2 = self.create(self.task_attributes_additional)
         tasks_list = self.list()
-        assert len(tasks_list) == 2
         assert [task_1, task_2] == tasks_list
 
     def test_create(self) -> None:
@@ -117,10 +116,8 @@ class TestTaskViewSet(TestViewSetBase):
         task_1 = self.create(self.task_attributes)
         task_2 = self.create(self.task_attributes_additional)
         tasks_list = self.list(kwargs={"author": "john"})
-        assert len(tasks_list) == 2
-        assert task_1 in tasks_list
-        assert task_2 in tasks_list
+        assert [task_2, task_1] == tasks_list
         tasks_list = self.list(kwargs={"executor": "dorian"})
-        assert task_2 == tasks_list[0]
+        assert [task_2] == tasks_list
         tasks_list = self.list(kwargs={"tags": "ok"})
-        assert task_1 == tasks_list[0]
+        assert [task_1] == tasks_list
