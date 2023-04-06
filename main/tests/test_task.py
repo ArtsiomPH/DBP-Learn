@@ -82,40 +82,44 @@ class TestTaskViewSet(TestViewSetBase):
         return {"id": entity["id"], **attributes}
 
     def test_list(self) -> None:
-        task_1 = self.create(self.task_attributes)
-        task_2 = self.create(self.task_attributes_additional)
+        task_1 = self.create(self.task_attributes, formatting='json')
+        task_2 = self.create(self.task_attributes_additional, formatting='json')
         tasks_list = self.list()
         assert len(tasks_list) == 2
         assert task_1 in tasks_list and task_2 in tasks_list
 
     def test_create(self) -> None:
-        task = self.create(self.task_attributes)
+        task = self.create(self.task_attributes, formatting='json')
         expected_response = self.expected_details(task, self.task_attributes)
+        task["author"] = dict(task["author"])
+        task["executor"] = dict(task["executor"])
+        del task["author"]["avatar_picture"]
+        del task["executor"]["avatar_picture"]
         assert task == expected_response
 
     def test_retrieve(self) -> None:
-        task = self.create(self.task_attributes)
+        task = self.create(self.task_attributes, formatting='json')
         retrived_user = self.retrieve(task["id"])
         assert task == retrived_user
 
     def test_update(self) -> None:
         for_update = {"mod_date": "2023-03-13"}
-        task = self.create(self.task_attributes)
-        updated_task = self.update(for_update, task["id"])
+        task = self.create(self.task_attributes, formatting='json')
+        updated_task = self.update(for_update, task["id"], formatting='json')
         task.update(for_update)
         assert task == updated_task
-        updated_task = self.update(self.for_update_executor, task["id"])
+        updated_task = self.update(self.for_update_executor, task["id"], formatting='json')
         task.update(self.for_update_executor)
         assert task == self.expected_details(updated_task, task)
 
     def test_delete(self) -> None:
-        task = self.create(self.task_attributes)
+        task = self.create(self.task_attributes, formatting='json')
         deleted_task = self.delete(task["id"])
         assert deleted_task == 204
 
     def test_filtration(self) -> None:
-        task_1 = self.create(self.task_attributes)
-        task_2 = self.create(self.task_attributes_additional)
+        task_1 = self.create(self.task_attributes, formatting='json')
+        task_2 = self.create(self.task_attributes_additional, formatting='json')
         tasks_list = self.list(kwargs={"author": "john"})
         assert len(tasks_list) == 2
         assert task_1 in tasks_list

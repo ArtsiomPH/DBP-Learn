@@ -1,7 +1,8 @@
 from http import HTTPStatus
-from typing import Union, List
+from typing import Union, List, Optional
 
 from rest_framework.test import APIClient, APITestCase
+from rest_framework.response import Response
 from django.urls import reverse
 
 from main.models import User
@@ -42,11 +43,16 @@ class TestViewSetBase(APITestCase):
         assert response.status_code == HTTPStatus.OK
         return response.json()
 
-    def create(self, data: dict, args: List[Union[str, int]] = None) -> dict:
+    def create(self, data: dict, args: List[Union[str, int]] = None, formatting: Optional[str] = None) -> dict:
         self.client.force_authenticate(user=self.user, token=None)
-        response = self.client.post(self.list_url(args), data=data, format="json")
+        response = self.client.post(self.list_url(args), data=data, format=formatting)
         assert response.status_code == HTTPStatus.CREATED, response.content
         return response.data
+
+    def create_request(self, data: dict, args: List[Union[str, int]] = None, formatting: Optional[str] = None) -> Response:
+        self.client.force_authenticate(user=self.user, token=None)
+        response = self.client.post(self.list_url(args), data=data, format=formatting)
+        return response
 
     def retrieve(self, key: Union[str, int] = None) -> dict:
         self.client.force_authenticate(user=self.user, token=None)
@@ -54,9 +60,9 @@ class TestViewSetBase(APITestCase):
         assert response.status_code == HTTPStatus.OK
         return response.data
 
-    def update(self, data: dict, key: Union[str, int] = None) -> dict:
+    def update(self, data: dict, key: Union[str, int] = None, formatting: Optional[str] = None) -> dict:
         self.client.force_authenticate(user=self.user, token=None)
-        response = self.client.patch(self.detail_url(key), data=data, format="json")
+        response = self.client.patch(self.detail_url(key), data=data, format=formatting)
         assert response.status_code == HTTPStatus.OK
         return response.data
 

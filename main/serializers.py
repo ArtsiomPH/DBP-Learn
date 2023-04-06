@@ -7,7 +7,14 @@ from .models import User, Task, Tag
 from .validators import FileMaxSizeValidator
 from task_manager import settings
 
+
 class UserSerializer(UniqueFieldsMixin, serializers.ModelSerializer):
+    avatar_picture = serializers.FileField(
+        required=False,
+        validators=[FileMaxSizeValidator(settings.UPLOAD_MAX_SIZES["avatar_picture"]),
+                    FileExtensionValidator(["jpeg", "jpg", "png"])]
+    )
+
     class Meta:
         model = User
         fields = (
@@ -19,6 +26,7 @@ class UserSerializer(UniqueFieldsMixin, serializers.ModelSerializer):
             "date_of_birth",
             "phone",
             "role",
+            "avatar_picture",
         )
 
 
@@ -32,11 +40,6 @@ class TaskSerializer(WritableNestedModelSerializer):
     author = UserSerializer(many=False)
     executor = UserSerializer(many=False)
     tags = TagSerializer(many=True)
-    avatar_picture = serializers.FileField(
-        required=False,
-        validators=[FileMaxSizeValidator(settings.UPLOAD_MAX_SIZES["avatar_picture"]),
-                    FileExtensionValidator(["jpeg", "jpg", "png"])]
-    )
 
     class Meta:
         model = Task
@@ -52,7 +55,6 @@ class TaskSerializer(WritableNestedModelSerializer):
             "author",
             "executor",
             "tags",
-            "avatar_picture",
         )
 
     def create(self, validated_data):
