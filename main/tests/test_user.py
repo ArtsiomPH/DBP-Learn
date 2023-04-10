@@ -78,7 +78,7 @@ class TestUserViewSet(TestViewSetBase):
         users_list = self.list(kwargs={"username": "alex"})
         assert len(users_list) == 0
         users_list = self.list(kwargs={"username": "dorian"})
-        assert user_2 == [users_list]
+        assert [user_2] == users_list
 
     def test_large_avatar(self) -> None:
         user_attributes = factory.build(dict, FACTORY_CLASS=UserFactory,
