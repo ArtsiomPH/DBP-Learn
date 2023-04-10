@@ -21,6 +21,34 @@ class TestTaskViewSet(TestViewSetBase):
             "role": "developer",
         },
         "executor": {
+            "username": "johnsmith",
+            "first_name": "John",
+            "last_name": "Smith",
+            "email": "john@test.com",
+            "date_of_birth": "2000-01-01",
+            "phone": "+79000000000",
+            "role": "developer",
+        },
+        "tags": [{"title": "ok"}],
+    }
+    task_attributes_additional = {
+        "title": "another task",
+        "description": "big task",
+        "creation_date": "2023-04-08",
+        "mod_date": "2023-04-08",
+        "deadline": "2023-04-15",
+        "status": "new_task",
+        "priority": 1,
+        "author": {
+            "username": "johnsmith",
+            "first_name": "John",
+            "last_name": "Smith",
+            "email": "john@test.com",
+            "date_of_birth": "2000-01-01",
+            "phone": "+79000000000",
+            "role": "developer",
+        },
+        "executor": {
             "username": "johndorian",
             "first_name": "John",
             "last_name": "Dorian",
@@ -29,7 +57,7 @@ class TestTaskViewSet(TestViewSetBase):
             "phone": "+79000000000",
             "role": "developer",
         },
-        "tags": [{"title": "ok"}, {"title": "not ok"}],
+        "tags": [{"title": "important"}],
     }
     for_update_executor = {
         "executor": {
@@ -52,6 +80,12 @@ class TestTaskViewSet(TestViewSetBase):
         }
         attributes["tags"] = entity["tags"]
         return {"id": entity["id"], **attributes}
+
+    def test_list(self) -> None:
+        task_1 = self.create(self.task_attributes)
+        task_2 = self.create(self.task_attributes_additional)
+        tasks_list = self.list()
+        assert [task_1, task_2] == tasks_list
 
     def test_create(self) -> None:
         task = self.create(self.task_attributes)
@@ -79,10 +113,11 @@ class TestTaskViewSet(TestViewSetBase):
         assert deleted_task == 204
 
     def test_filtration(self) -> None:
-        task = self.create(self.task_attributes)
-        expected_tasks = self.list(kwargs={"author": "john"})
-        assert task == expected_tasks[0]
-        expected_tasks = self.list(kwargs={"executor": "dorian"})
-        assert task == expected_tasks[0]
-        expected_tasks = self.list(kwargs={"tags": "ok"})
-        assert task == expected_tasks[0]
+        task_1 = self.create(self.task_attributes)
+        task_2 = self.create(self.task_attributes_additional)
+        tasks_list = self.list(kwargs={"author": "john"})
+        assert [task_2, task_1] == tasks_list
+        tasks_list = self.list(kwargs={"executor": "dorian"})
+        assert [task_2] == tasks_list
+        tasks_list = self.list(kwargs={"tags": "ok"})
+        assert [task_1] == tasks_list

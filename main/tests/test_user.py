@@ -12,10 +12,26 @@ class TestUserViewSet(TestViewSetBase):
         "phone": "+79000000000",
         "role": "developer",
     }
+    user_attributes_additional = {
+        "username": "johndorian",
+        "first_name": "John",
+        "last_name": "Dorian",
+        "email": "jd@test.com",
+        "date_of_birth": "2000-01-01",
+        "phone": "+79000000000",
+        "role": "developer",
+    }
 
     @staticmethod
     def expected_details(entity: dict, attributes: dict) -> dict:
         return {"id": entity["id"], **attributes}
+
+    def test_list(self) -> None:
+        user_1 = self.create(self.user_attributes)
+        user_2 = self.create(self.user_attributes_additional)
+        users_list = self.list()
+        assert len(users_list) == 4  # two test users plus api user and api admin
+        assert user_1 in users_list and user_2 in users_list
 
     def test_create(self) -> None:
         user = self.create(self.user_attributes)
@@ -40,8 +56,11 @@ class TestUserViewSet(TestViewSetBase):
         assert deleted_user == 204
 
     def test_filtration(self) -> None:
-        user = self.create(self.user_attributes)
-        expected_users = self.list(kwargs={"username": "john"})
-        assert user == expected_users[0]
-        expected_users = self.list(kwargs={"username": "alex"})
-        assert len(expected_users) == 0
+        user_1 = self.create(self.user_attributes)
+        user_2 = self.create(self.user_attributes_additional)
+        users_list = self.list(kwargs={"username": "john"})
+        assert [user_1, user_2] == users_list
+        users_list = self.list(kwargs={"username": "alex"})
+        assert len(users_list) == 0
+        users_list = self.list(kwargs={"username": "dorian"})
+        assert [user_2] == users_list
