@@ -41,7 +41,7 @@ class TestUserViewSet(TestViewSetBase):
         user_attributes = factory.build(dict, FACTORY_CLASS=UserFactory)
         user_2 = self.create(user_attributes)
         users_list = self.list()
-        assert len(users_list) == 4  # two test users plus two api user and api admin
+        assert len(users_list) == 4  # two test users plus api user and api admin
         assert user_1 in users_list and user_2 in users_list
 
     def test_create(self) -> None:
@@ -74,12 +74,11 @@ class TestUserViewSet(TestViewSetBase):
         user_1 = self.create(self.user_attributes)
         user_2 = self.create(self.user_attributes_additional)
         users_list = self.list(kwargs={"username": "john"})
-        assert len(users_list) == 2
-        assert user_1 in users_list and user_2 in users_list
+        assert [user_1, user_2] == users_list
         users_list = self.list(kwargs={"username": "alex"})
         assert len(users_list) == 0
         users_list = self.list(kwargs={"username": "dorian"})
-        assert user_2 == users_list[0]
+        assert user_2 == [users_list]
 
     def test_large_avatar(self) -> None:
         user_attributes = factory.build(dict, FACTORY_CLASS=UserFactory,
