@@ -31,4 +31,4 @@ class TaskAdmin(admin.ModelAdmin):
 
 @admin.register(User, site=task_manager_admin_site)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ("username", "first_name", "last_name", "email", "is_staff", "role")
+    list_display = ("username", "first_name", "last_name", "email", "is_staff", "role", "avatar_picture")

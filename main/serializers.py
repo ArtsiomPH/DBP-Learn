@@ -1,11 +1,20 @@
 from rest_framework import serializers
 from drf_writable_nested.serializers import WritableNestedModelSerializer
 from drf_writable_nested.mixins import UniqueFieldsMixin
+from django.core.validators import FileExtensionValidator
 
 from .models import User, Task, Tag
+from .validators import FileMaxSizeValidator
+from task_manager import settings
 
 
 class UserSerializer(UniqueFieldsMixin, serializers.ModelSerializer):
+    avatar_picture = serializers.FileField(
+        required=False,
+        validators=[FileMaxSizeValidator(settings.UPLOAD_MAX_SIZES["avatar_picture"]),
+                    FileExtensionValidator(["jpeg", "jpg", "png"])]
+    )
+
     class Meta:
         model = User
         fields = (
@@ -17,6 +26,7 @@ class UserSerializer(UniqueFieldsMixin, serializers.ModelSerializer):
             "date_of_birth",
             "phone",
             "role",
+            "avatar_picture",
         )
 
 
