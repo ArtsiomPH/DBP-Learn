@@ -476,6 +476,21 @@ files = [
 ]
 
 [[package]]
+name = "drf-extensions"
+version = "0.7.1"
+description = "Extensions for Django REST Framework"
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "drf-extensions-0.7.1.tar.gz", hash = "sha256:90abfc11a2221e8daf4cd54457e41ed38cd71134678de9622e806193db027db1"},
+    {file = "drf_extensions-0.7.1-py2.py3-none-any.whl", hash = "sha256:007910437e64aa1d5ad6fc47266a4ac4280e31761e6458eb30fcac7494ac7d4e"},
+]
+
+[package.dependencies]
+djangorestframework = ">=3.9.3"
+
+[[package]]
 name = "drf-writable-nested"
 version = "0.7.0"
 description = "Writable nested helpers for django-rest-framework's serializers"
@@ -1326,4 +1341,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "1d741dac259978012c759e5ba10242a96a7ee3f1b1bb318b9bec495533b3163d"
+content-hash = "bc836394225938af7ed0d41da8f7a4c0a5489dc5cc20256313beda345d45f000"

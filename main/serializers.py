@@ -11,8 +11,10 @@ from task_manager import settings
 class UserSerializer(UniqueFieldsMixin, serializers.ModelSerializer):
     avatar_picture = serializers.FileField(
         required=False,
-        validators=[FileMaxSizeValidator(settings.UPLOAD_MAX_SIZES["avatar_picture"]),
-                    FileExtensionValidator(["jpeg", "jpg", "png"])]
+        validators=[
+            FileMaxSizeValidator(settings.UPLOAD_MAX_SIZES["avatar_picture"]),
+            FileExtensionValidator(["jpeg", "jpg", "png"]),
+        ],
     )
 
     class Meta:
@@ -39,7 +41,7 @@ class TagSerializer(serializers.ModelSerializer):
 class TaskSerializer(WritableNestedModelSerializer):
     author = UserSerializer(many=False)
     executor = UserSerializer(many=False)
-    tags = TagSerializer(many=True)
+    tags = TagSerializer(many=True, required=False)
 
     class Meta:
         model = Task

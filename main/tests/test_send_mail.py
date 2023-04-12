@@ -41,7 +41,7 @@ class TestSendEmail(TestViewSetBase):
 
     @patch.object(mail, "send_mail")
     def test_send_assign_notification(self, fake_sender: MagicMock) -> None:
-        task = self.create(self.task_attributes, formatting='json')
+        task = self.create(self.task_attributes, formatting="json")
         executor_email = task["executor"]["email"]
 
         send_assign_notification(task["id"])
