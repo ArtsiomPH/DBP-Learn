@@ -1,9 +1,12 @@
 from django.core import mail
 from django.template.loader import render_to_string
 
+from celery import shared_task
+
 from main.models import Task
 
 
+@shared_task()
 def send_assign_notification(task_id: int) -> None:
     task = Task.objects.get(pk=task_id)
     assignee = task.executor
@@ -20,6 +23,7 @@ def send_assign_notification(task_id: int) -> None:
     )
 
 
+@shared_task()
 def send_html_email(
     subject: str, template: str, context: dict, recipients: list[str]
 ) -> None:
