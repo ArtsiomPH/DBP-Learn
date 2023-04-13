@@ -17,6 +17,8 @@ x-db-config: &db-config
   EMAIL_PORT: 465
   EMAIL_USE_TLS: "False"
   EMAIL_USE_SSL: "True"
+  REDIS_HOST: redis
+  REDIS_PORT: 6379
 
 services:
   api:
