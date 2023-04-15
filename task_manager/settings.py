@@ -212,5 +212,5 @@ LOGGING = {
     },
     "loggers": {
         "django.server": {"level": "INFO", "handlers": ["console"]},
-    }
+    },
 }
