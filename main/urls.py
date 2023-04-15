@@ -15,7 +15,8 @@ from .views import (
     CurrentUserViewSet,
     UserTasksViewSet,
     TaskTagsViewSet,
-    CountdownJobViewSet
+    CountdownJobViewSet,
+    AsyncJobViewSet,
 )
 from .services.single_resource import BulkRouter
 
@@ -50,6 +51,7 @@ tasks.register(
     parents_query_lookups=["task_id"],
 )
 router.register(r"countdown", CountdownJobViewSet, basename="countdown")
+router.register(r"jobs", AsyncJobViewSet, basename="jobs")
 
 urlpatterns = [
     path("", include(router.urls)),
