@@ -1,3 +1,7 @@
+from typing import Any
+
+from celery.result import AsyncResult
+
 from rest_framework import serializers
 from drf_writable_nested.serializers import WritableNestedModelSerializer
 from drf_writable_nested.mixins import UniqueFieldsMixin
@@ -6,6 +10,7 @@ from django.core.validators import FileExtensionValidator
 from .models import User, Task, Tag
 from .validators import FileMaxSizeValidator
 from task_manager import settings
+from task_manager.tasks import countdown
 
 
 class UserSerializer(UniqueFieldsMixin, serializers.ModelSerializer):
@@ -59,7 +64,7 @@ class TaskSerializer(WritableNestedModelSerializer):
             "tags",
         )
 
-    def create(self, validated_data):
+    def create(self, validated_data: dict) -> Task:
         for user in ["author", "executor"]:
             user_dict = validated_data.pop(user)
             user_instance, _ = User.objects.get_or_create(**user_dict)
@@ -73,3 +78,22 @@ class TaskSerializer(WritableNestedModelSerializer):
         new_task = Task.objects.create(**validated_data)
         new_task.tags.set(tags_list)
         return new_task
+
+
+class RepresentationSerializer(serializers.Serializer):
+    def update(self, instance: Any, validated_data: dict) -> Any:
+        pass
+
+    def create(self, validated_data: dict) -> Any:
+        pass
+
+
+class CountdownJobSerializer(RepresentationSerializer):
+    seconds = serializers.IntegerField(write_only=True)
+
+    task_id = serializers.CharField(read_only=True)
+    status = serializers.CharField(read_only=True)
+
+    def create(self, validated_data: dict) -> AsyncResult:
+        return countdown.delay(**validated_data)
+

@@ -1,11 +1,12 @@
 from typing import cast
 
+from django.urls import reverse
 import django_filters
-from rest_framework import viewsets
+from rest_framework import viewsets, mixins
 from rest_framework_extensions.mixins import NestedViewSetMixin
 
 from .models import Tag, Task, User
-from .serializers import TagSerializer, TaskSerializer, UserSerializer
+from .serializers import TagSerializer, TaskSerializer, UserSerializer, CountdownJobSerializer
 from main.services.single_resource import SingleResourceMixin, SingleResourceUpdateMixin
 
 
@@ -40,9 +41,9 @@ class UserViewSet(viewsets.ModelViewSet):
 class TaskViewSet(viewsets.ModelViewSet):
     queryset = (
         Task.objects.select_related("author")
-        .select_related("executor")
-        .prefetch_related("tags")
-        .all()
+            .select_related("executor")
+            .prefetch_related("tags")
+            .all()
     )
     serializer_class = TaskSerializer
     filterset_class = TaskFilter
@@ -66,8 +67,8 @@ class CurrentUserViewSet(
 class UserTasksViewSet(NestedViewSetMixin, viewsets.ReadOnlyModelViewSet):
     queryset = (
         Task.objects.order_by("id")
-        .select_related("author", "executor")
-        .prefetch_related("tags")
+            .select_related("author", "executor")
+            .prefetch_related("tags")
     )
     serializer_class = TaskSerializer
 
@@ -78,3 +79,12 @@ class TaskTagsViewSet(viewsets.ReadOnlyModelViewSet):
     def get_queryset(self):
         task_id = self.kwargs["parent_lookup_task_id"]
         return Task.objects.get(pk=task_id).tags.all()
+
+
+class CountdownJobViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
+    serializer_class = CountdownJobSerializer
+
+    def get_success_headers(self, data: dict) -> dict[str, str]:
+        task_id = data["task_id"]
+        return {"Location": reverse("jobs-detail", args=[task_id])}
+
